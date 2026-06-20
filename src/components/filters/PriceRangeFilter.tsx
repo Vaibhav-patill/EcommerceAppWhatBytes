@@ -34,7 +34,7 @@ export default function PriceRangeFilter({
   return (
     <fieldset>
       <legend className="mb-2 text-sm font-semibold text-foreground">
-        Price
+        Price Range
       </legend>
       <input
         type="range"

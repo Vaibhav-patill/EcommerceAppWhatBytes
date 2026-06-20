@@ -1,37 +1,237 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shophub — E-Commerce Frontend Assignment
 
-## Getting Started
+A fully featured e-commerce storefront built with **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, and **Zustand**. Submitted as part of the Whatbytes Frontend Assignment.
 
-First, run the development server:
+🔗 **Live Demo:** _[Add your Vercel URL here after deployment]_
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| UI Library | React 19 |
+| Language | TypeScript 5 |
+| Styling | Tailwind CSS v4 |
+| State Management | Zustand 5 with `persist` middleware |
+| Icons | Lucide React |
+| Deployment | Vercel |
+
+---
+
+## Features
+
+### Home Page (`/`)
+- Responsive product grid — 3 columns desktop / 2 tablet / 1 mobile
+- Sidebar with category, price range, and brand filters
+- All filters sync bidirectionally with URL search params (`?category=electronics&price=0-500&brand=Cacyroy`)
+- Live result count updates as filters are applied
+- Full-text search across title, brand, and category
+- Mobile filter drawer with active-filter badge indicator
+- Skeleton loading state via Next.js `loading.tsx` + Suspense
+
+### Product Detail Page (`/product/[id]`)
+- Statically generated at build time (`generateStaticParams`)
+- Image carousel with thumbnail navigation
+- Rating stars, review count, category badge
+- Quantity selector (1–10) with Add to Cart
+- "Added!" confirmation flash on the button
+
+### Cart Page (`/cart`)
+- Full cart item list with image, title, brand, unit price, line total
+- Inline quantity controls and per-item remove button
+- Order summary: subtotal, conditional shipping (free above $100), total
+- "Clear cart" action
+- Skeleton loading state + empty state with contextual copy
+
+### Filters
+- URL-driven: all filter state lives in the URL — links are shareable and bookmarkable
+- Server Component reads `searchParams` and filters the product list at render time — no client-side fetch
+- Supported filters: `?q=`, `?category=`, `?price=min-max`, `?brand=`
+
+### Cart Persistence
+- Zustand `persist` middleware writes to `localStorage` under the key `shophub-cart`
+- Cart survives hard refreshes and browser restarts
+- Hydration guards on `CartBadge` and `CartPage` prevent SSR/client mismatch
+
+---
+
+## Architecture
+
+```
+src/
+├── app/                        # Next.js App Router
+│   ├── layout.tsx              # Root layout — Header + Footer
+│   ├── page.tsx                # Home page (Server Component)
+│   ├── loading.tsx             # Home page Suspense skeleton
+│   ├── not-found.tsx           # 404 page
+│   ├── cart/
+│   │   ├── page.tsx            # Cart page (Client Component)
+│   │   └── loading.tsx         # Cart skeleton
+│   └── product/[id]/
+│       ├── page.tsx            # Product detail (Server Component, SSG)
+│       └── loading.tsx         # Detail skeleton
+│
+├── components/
+│   ├── layout/
+│   │   ├── Header.tsx          # Logo, search bar, cart badge, profile
+│   │   └── Footer.tsx          # Links, social icons, copyright
+│   ├── product/
+│   │   ├── ProductCard.tsx     # Grid card with Add to Cart
+│   │   ├── ProductGrid.tsx     # Responsive grid + empty state
+│   │   ├── ProductImageCarousel.tsx
+│   │   ├── ProductPurchasePanel.tsx  # Qty selector + Add to Cart (detail)
+│   │   ├── AddToCartButton.tsx       # Reusable button with flash feedback
+│   │   ├── QuantitySelector.tsx
+│   │   └── RatingStars.tsx
+│   ├── filters/
+│   │   ├── Sidebar.tsx         # Desktop sticky + mobile drawer
+│   │   ├── CategoryFilter.tsx
+│   │   ├── PriceRangeFilter.tsx
+│   │   └── BrandFilter.tsx
+│   ├── cart/
+│   │   ├── CartBadge.tsx       # Live item count in header
+│   │   ├── CartItem.tsx        # Row with qty controls + remove
+│   │   ├── CartSummary.tsx     # Subtotal / shipping / total
+│   │   └── EmptyCart.tsx
+│   └── ui/
+│       ├── SearchBar.tsx
+│       ├── EmptyState.tsx      # Contextual empty state for the grid
+│       ├── ProductCardSkeleton.tsx
+│       └── PageSkeleton.tsx
+│
+├── store/
+│   └── cartStore.ts            # Zustand store with persist middleware
+│
+├── hooks/
+│   └── useUrlFilters.ts        # Read/write URL search params for filters
+│
+└── lib/
+    ├── types.ts                # Product, CartItem, ProductFilters
+    ├── data/
+    │   └── products.ts         # Mock product data + getProducts / getProductById
+    └── utils/
+        ├── filterProducts.ts   # Pure filter + parse functions
+        └── formatPrice.ts      # Intl.NumberFormat currency helper
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Data Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+URL Search Params (?category=electronics&price=0-500)
+        │
+        ▼
+app/page.tsx  (Server Component — reads searchParams prop)
+        │
+        ├── parseFilters()   →  typed filter object
+        ├── getProducts()    →  full mock product array
+        └── filterProducts() →  filtered subset
+                │
+                ▼
+        <ProductGrid products={filtered} />   ← Server render
+                │
+                ▼
+        <ProductCard />   ← "use client" — Add to Cart calls useCartStore
+                │
+                ▼
+        useCartStore.addItem()  →  Zustand state  →  localStorage
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## State Management
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| State | Owner | Persistence |
+|---|---|---|
+| Cart items + quantities | Zustand `useCartStore` | `localStorage` via `persist` |
+| Active filters (category, price, brand, search) | URL search params | URL (shareable) |
+| Mobile sidebar open/closed | `useState` in `Sidebar` | Ephemeral |
+| Add-to-cart flash feedback | `useState` in `ProductCard` / `AddToCartButton` | Ephemeral |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Local Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# 1. Clone the repository
+git clone https://github.com/<your-username>/ecommerce-app.git
+cd ecommerce-app
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# EcommerceAppWhatBytes
+# 2. Install dependencies
+npm install
+
+# 3. Run the development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+```bash
+# Type-check
+npx tsc --noEmit
+
+# Lint
+npm run lint
+
+# Production build
+npm run build
+npm start
+```
+
+No environment variables are required — the app runs entirely on local mock data.
+
+---
+
+## Deployment
+
+The project is deployed on **Vercel** using zero-config Next.js integration.
+
+### Steps to deploy your own instance
+
+1. Push the repository to GitHub.
+2. Go to [vercel.com/new](https://vercel.com/new) → import the repo.
+3. Leave all settings at their defaults (Vercel auto-detects Next.js).
+4. Click **Deploy**.
+5. Copy the generated URL and paste it into the `Live Demo` link at the top of this README.
+
+```bash
+# Or deploy via Vercel CLI
+npx vercel --prod
+```
+
+---
+
+## Screenshots
+
+### Home Page
+
+Shows the responsive product grid, search bar, and filters.
+
+![Home Page](./public/screenshots/homepage1.png)
+
+---
+
+### Home Page (Filters Applied)
+
+Demonstrates category, brand, and price filtering with URL-synced state.
+
+![Home Page - Filters](./public/screenshots/homepage2.png)
+
+---
+
+### Product Detail Page
+
+Displays product images, ratings, quantity selector, and Add to Cart functionality.
+
+![Product Detail Page](./public/screenshots/productdetailpage.png)
+
+---
+
+### Cart Page
+
+Shows cart items, quantity controls, subtotal, shipping, and total calculation.
+
+![Cart Page](./public/screenshots/cartdetails.png)
