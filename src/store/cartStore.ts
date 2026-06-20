@@ -69,7 +69,7 @@ export const useCartStore = create<CartState>()(
     {
       name: "shophub-cart", // localStorage key
       storage: createJSONStorage(() => localStorage),
-      // Only persist the items array — actions are recreated on every mount
+      
       partialize: (state) => ({ items: state.items }),
     }
   )

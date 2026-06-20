@@ -18,11 +18,7 @@ export default function PriceRangeFilter({
   defaultMax,
   onChange,
 }: PriceRangeFilterProps) {
-  // Local state lets the slider feel responsive while dragging;
-  // the URL (and therefore the filtered product list) only updates
-  // once the user releases the slider. When `max` changes externally
-  // (e.g. "Clear all"), we resync local state during render rather
-  // than in an effect, avoiding an extra render pass.
+
   const [localMax, setLocalMax] = useState(max);
   const [previousMax, setPreviousMax] = useState(max);
 

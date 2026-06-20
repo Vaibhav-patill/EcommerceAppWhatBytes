@@ -2,7 +2,7 @@
 
 A fully featured e-commerce storefront built with **Next.js 16**, **React 19**, **TypeScript**, **Tailwind CSS v4**, and **Zustand**. Submitted as part of the Whatbytes Frontend Assignment.
 
-🔗 **Live Demo:** _[Add your Vercel URL here after deployment]_
+🔗 **Live Demo:** (https://ecommerce-app-what-bytes.vercel.app/)
 
 ---
 

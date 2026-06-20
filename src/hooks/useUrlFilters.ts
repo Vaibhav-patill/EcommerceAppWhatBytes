@@ -15,12 +15,6 @@ export interface UrlFilterValues {
 const DEFAULT_MIN_PRICE = 0;
 const DEFAULT_MAX_PRICE = 1000;
 
-/**
- * Reads filter state from the URL and exposes setters that push
- * updated query params without a full page reload. The URL remains
- * the single source of truth for filters, so links stay shareable
- * and the server component re-renders with the correct filtered list.
- */
 export function useUrlFilters() {
   const router = useRouter();
   const pathname = usePathname();

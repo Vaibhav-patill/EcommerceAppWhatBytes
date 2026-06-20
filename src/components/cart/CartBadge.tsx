@@ -7,10 +7,7 @@ export default function CartBadge() {
   const totalItems = useCartStore((state) => state.totalItems());
   const [mounted, setMounted] = useState(false);
 
-  // Prevent SSR/client hydration mismatch:
-  // On the server, localStorage doesn't exist so the store always
-  // starts with items=[]. On the client after hydration, it rehydrates
-  // from localStorage. We suppress the badge until mount is confirmed.
+
   useEffect(() => {
     setMounted(true);
   }, []);
