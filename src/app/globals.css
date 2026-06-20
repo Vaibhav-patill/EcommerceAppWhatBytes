@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+
+
 :root {
   --background: #f8fafc;
   --foreground: #0f172a;
@@ -41,4 +43,17 @@ body {
   outline: 2px solid var(--brand-600);
   outline-offset: 2px;
   border-radius: 4px;
+}
+
+
+/* Hide native clear button in search inputs */
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
 }

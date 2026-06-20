@@ -9,16 +9,12 @@ const DEBOUNCE_MS = 300;
 export default function SearchBar() {
   const { values, setSearch } = useUrlFilters();
 
-  // Local input state keeps typing instant; the URL (and therefore the
-  // server-filtered product list) updates after a short debounce so we
-  // aren't pushing a router navigation on every keystroke.
+  
   const [inputValue, setInputValue] = useState(values.q);
   const [previousUrlValue, setPreviousUrlValue] = useState(values.q);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // If the URL's search term changes from outside this component
-  // (e.g. "Clear all" in the sidebar, browser back/forward), resync
-  // the visible input text to match.
+ 
   if (values.q !== previousUrlValue) {
     setPreviousUrlValue(values.q);
     setInputValue(values.q);
