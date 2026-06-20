@@ -43,8 +43,7 @@ export const products: Product[] = [
     reviewCount: 76,
     images: [
       "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80",
-      "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?w=800&q=80",
-    ],
+      "https://images.unsplash.com/photo-1622260614153-03223fb72052?q=80&w=687",]
   },
   {
     id: "4",
@@ -102,8 +101,8 @@ export const products: Product[] = [
     rating: 4.0,
     reviewCount: 58,
     images: [
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
       "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&q=80",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80",
     ],
   },
   {
@@ -118,7 +117,7 @@ export const products: Product[] = [
     reviewCount: 873,
     images: [
       "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=800&q=80",
-      "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=800&q=80",
+      "https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?q=80&w=1170",
     ],
   },
   {
@@ -147,8 +146,8 @@ export const products: Product[] = [
     rating: 4.5,
     reviewCount: 64,
     images: [
-      "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&q=80",
-      "https://images.unsplash.com/photo-1577937927133-66ef06acdf18?w=800&q=80",
+      "https://images.unsplash.com/photo-1724905136845-b56958ce82cf?q=80",
+      "https://images.unsplash.com/photo-1542556398-95fb5b9f9b48?q=80",
     ],
   },
   {
@@ -163,7 +162,7 @@ export const products: Product[] = [
     reviewCount: 112,
     images: [
       "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=800&q=80",
-      "https://images.unsplash.com/photo-1543087903-1ac2ec7aa8c5?w=800&q=80",
+      "https://images.unsplash.com/photo-1611312449408-fcece27cdbb7?q=80&w=669",
     ],
   },
   {
@@ -177,8 +176,8 @@ export const products: Product[] = [
     rating: 3.9,
     reviewCount: 21,
     images: [
-      "https://images.unsplash.com/photo-1584100936595-c0654b55a2e6?w=800&q=80",
-      "https://images.unsplash.com/photo-1592789705501-f9ae4287c4cb?w=800&q=80",
+      "https://images.unsplash.com/photo-1691256676366-370303d55b61?q=80",
+      "https://images.unsplash.com/photo-1629949008790-ca50382f7f98?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     ],
   },
 ];
